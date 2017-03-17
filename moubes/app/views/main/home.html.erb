@@ -1,0 +1,9 @@
+<h2>Mr Intra</h2>
+<p>Mr Intra is designed to make your intra viewing easier (and uglier). Type a username below to begin.</p>
+<%= form_tag("/main/userpage", method: "get") do %>
+  <%= label_tag("Search for:") %>
+  <%= text_field_tag "usernamesearch" %>
+  <%= submit_tag("Show") %>
+<% end %><br></br>
+<%= link_to 'See all users', :controller => "main", :action => :allusers %><br></br>
+<%= link_to 'Refresh superusers page (WARNING: SLOW)', :controller => "main", :action => :refresh %><br></br>
