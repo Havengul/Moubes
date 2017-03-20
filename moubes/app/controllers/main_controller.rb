@@ -346,12 +346,14 @@ class MainController < ApplicationController
     userlist = get_all_usernames
     mass_info = Array.new()
     my_file = File.open("app/fixtures/projectlistdisplay.txt")
-    mass_info.push(my_file.read.split)
+    #mass_info.push(my_file.read.split)
     for i in 0..userlist.size-1
       temp_info = Array.new()
       temp_info = get_user_marks(userlist[i])
       mass_info << temp_info
     end
+    mass_info.sort_by!{|k| k[1]}.reverse!
+    mass_info.insert(0, my_file.read.split)
     return mass_info
   end
 
