@@ -20,7 +20,9 @@
 <table>
   <tr>
     <% for i in 0..@mass_info[0].size-1 %>
-        <th bgcolor = "E5E5E5" ><%= @mass_info[0][i] %>  </th>
+        <th bgcolor = "E5E5E5" >
+          <a href=<%= "/main/allusers?sortby=" + i.to_s + "&commit=Show" %> ><%= @mass_info[0][i] %></a>
+        </th>
     <% end %>
   </tr>
   <% for i in 1..@mass_info.size-1 %>

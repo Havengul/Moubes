@@ -342,7 +342,7 @@ class MainController < ApplicationController
     return temp_info
   end
 
-  def get_mass_info
+  def get_mass_info(sort_num)
     userlist = get_all_usernames
     mass_info = Array.new()
     my_file = File.open("app/fixtures/projectlistdisplay.txt")
@@ -352,7 +352,7 @@ class MainController < ApplicationController
       temp_info = get_user_marks(userlist[i])
       mass_info << temp_info
     end
-    mass_info.sort_by!{|k| k[1]}.reverse!
+    mass_info.sort_by!{|k| k[sort_num]}.reverse!
     mass_info.insert(0, my_file.read.split)
     return mass_info
   end
@@ -469,7 +469,7 @@ class MainController < ApplicationController
       @first_name = data_hash['first_name']
       @last_name = data_hash['last_name']
       @login = data_hash['login']
-      @big_user_info = get_mass_info
+      @big_user_info = get_mass_info(0)
       @campus_name = data_hash['campus'][0]['name']
       @intra_link = data_hash['url']
       @level = data_hash['cursus_users'][0]['level']
@@ -507,7 +507,7 @@ class MainController < ApplicationController
   end
 
   def allusers
-    @mass_info = get_mass_info
+    @mass_info = get_mass_info(params[:sortby].to_i)
   end
 
   def refresh

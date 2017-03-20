@@ -5,5 +5,5 @@
   <%= text_field_tag "usernamesearch" %>
   <%= submit_tag("Show") %>
 <% end %><br></br>
-<%= link_to 'See all users', :controller => "main", :action => :allusers %><br></br>
+<a href=<%= "/main/allusers?sortby=1&commit=Show" %> ><%= "All Users" %></a><br></br>
 <%= link_to 'Refresh superusers page (WARNING: SLOW)', :controller => "main", :action => :refresh %><br></br>
