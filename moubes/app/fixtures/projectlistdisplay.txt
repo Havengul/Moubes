@@ -1,5 +1,6 @@
 Login
 SCR
+LVL
 D00
 D01
 D02
@@ -26,3 +27,16 @@ Ex2
 ExF
 BSQ
 AVG
+Cheat
+Validated
+FinalExam
+Exams
+Average
+LvL>=1
+Attendance
+Megatron
+P2P
+Days_Val
+Exams_Val
+Days_Miss
+Exam_Miss

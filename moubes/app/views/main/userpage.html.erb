@@ -1,91 +1,300 @@
 <head>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-</style>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      white-space:nowrap;
+      padding: 4px 7px 2px;
+    }
+    .greentext {
+      color: #31902B;
+    }
+
+    .redtext {
+      color: #EB0000;
+    }
+  </style>
 </head>
 <% if @can_show == true %>
-  <h1><%= @first_name %> <%= @last_name %>'s page</h1>
-  <%= link_to 'Home', root_path %><br></br>
-  <p>username:    <%= @login %></p><br></br>
-  <p>campus:    <%= @campus_name %></p><br></br>
-  <p>level:    <%= @level %></p><br></br>
-  <p>correction points:    <%= @correction_points %></p><br></br>
-  <p>wallet:    <%= @wallet %></p><br></br>
-  <table>
-    <caption>Projects With Marks</caption>
-    <tr>
-      <th>Project</th>
-      <th>Marks</th>
-    </tr>
-    <% for i in 0..@validated_arr.size-1 %>
+    <h1><%= @first_name %> <%= @last_name %>'s page</h1>
+    <%= link_to 'Home', root_path %><br></br>
+    <p>username:    <%= @login %></p><br></br>
+    <table>
       <tr>
-        <td><%= @validated_arr[i][0] %></td>
-        <td align="center"><%= @validated_arr[i][1] %></td>
+        <% for i in 0..@big_user_info[0].size-1 %>
+            <th bgcolor = "E5E5E5" ><%= @big_user_info[0][i] %>  </th>
+        <% end %>
       </tr>
-    <% end %>
-  </table>
-  <br></br>
-  <table>
-    <tr>
-      <th>Projects With 0%</th>
-    </tr>
-    <% for i in 0..@invalidated_arr.size-1 %>
+      <% for i in 1..@big_user_info.size-1 %>
+          <% if @big_user_info[i][0] == @login %>
+              <tr>
+                <td><b><a href=<%= "/main/userpage?usernamesearch=" + @big_user_info[i][0] + "&commit=Show" %> ><%= @big_user_info[i][0] %></a></b></td>
+                <% for j in 1..@big_user_info[i].size-1 %>
+                    <% if j == 1 %>
+                        <% if @big_user_info[i][j].to_i >= 5 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif  @big_user_info[i][j].to_i > 1 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 2 %>
+                        <% if @big_user_info[i][j] >= 1 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif  @big_user_info[i][j] > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j >= 3 &&  j <= 22 %>
+                        <% if @big_user_info[i][j].to_i >= 25 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j >= 23 && j <= 26 %>
+                        <% if @big_user_info[i][j].to_i >= 25 %>
+                            <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td bgcolor= "E5E5E5" align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 28 %>
+                        <% if @big_user_info[i][j] >= 10 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j] >= 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j >= 29 && j <= 34 %>
+                        <% if @big_user_info[i][j] == 1 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% end %>
+                    <% elsif j == 35 %>
+                        <% if @big_user_info[i][j].to_i > 23 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 36 %>
+                        <% if @big_user_info[i][j].to_i > 5 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 37 %>
+                        <% if @big_user_info[i][j].to_i > 45 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 38 %>
+                        <% if @big_user_info[i][j].to_i > 4 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i > 0 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 39 %>
+                        <% if @big_user_info[i][j].to_i > 1 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i == 1 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 40 %>
+                        <% if @big_user_info[i][j].to_i < 5 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i < 10 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% elsif j == 41 %>
+                        <% if @big_user_info[i][j].to_i == 0 %>
+                            <td class = "greentext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% elsif @big_user_info[i][j].to_i == 1 %>
+                            <td class = "redtext" align="center">
+                              <b><%= @big_user_info[i][j] %></b>
+                            </td>
+                        <% else %>
+                            <td align="center">
+                              <%= @big_user_info[i][j] %>
+                            </td>
+                        <% end %>
+                    <% else %>
+                        <td align="center">
+                          <%= @big_user_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% end %>
+              </tr>
+          <% end %>
+      <% end %>
+    </table>
+    <br></br>
+    <p>campus:    <%= @campus_name %></p><br></br>
+    <p>level:    <%= @level %></p><br></br>
+    <p>correction points:    <%= @correction_points %></p><br></br>
+    <p>wallet:    <%= @wallet %></p><br></br>
+    <table>
+      <caption>Projects With Marks</caption>
       <tr>
-        <td><%= @invalidated_arr[i] %></td>
+        <th>Project</th>
+        <th>Marks</th>
       </tr>
-    <% end %>
-  </table>
-  <br></br>
-  <table>
-    <tr>
-      <th>Projects Not Registered</th>
-     </tr>
-    <% for i in 0..@unregistered_arr.size-1 %>
+      <% for i in 0..@validated_arr.size-1 %>
+          <tr>
+            <td><%= @validated_arr[i][0] %></td>
+            <td align="center"><%= @validated_arr[i][1] %></td>
+          </tr>
+      <% end %>
+    </table>
+    <br></br>
+    <table>
       <tr>
-        <td><%= @unregistered_arr[i] %></td>
+        <th>Projects With 0%</th>
       </tr>
-    <% end %>
-  </table>
-  <br></br>
-  <table>
-    <tr>
-      <th>Projects Left Unmarked</th>
-    </tr>
-    <% for i in 0..@unmarked_arr.size-1 %>
+      <% for i in 0..@invalidated_arr.size-1 %>
+          <tr>
+            <td><%= @invalidated_arr[i] %></td>
+          </tr>
+      <% end %>
+    </table>
+    <br></br>
+    <table>
       <tr>
-        <td><%= @unmarked_arr[i] %></td>
+        <th>Projects Not Registered</th>
       </tr>
-    <% end %>
-  </table>
-  <br></br>
-  <p><%= @num_validated %> projects validated (excluding exams)</p>
-  <p><%= @num_exams_validated %> exams validated </p>
-  <p><%= @num_missed %> projects missed </p>
-  <p><%= @num_exam_missed %> exams missed </p>
-  <table>
-    <caption> Score </caption>
-    <tr>
-      <th>Criteria</th>
-      <th>Value</th>
-    </tr>
-    <% for i in 0..@score_arr.size-1 %>
+      <% for i in 0..@unregistered_arr.size-1 %>
+          <tr>
+            <td><%= @unregistered_arr[i] %></td>
+          </tr>
+      <% end %>
+    </table>
+    <br></br>
+    <table>
       <tr>
-        <td><%= @score_arr[i][0] %></td>
-        <td align="center"><%= @score_arr[i][1] %></td>
+        <th>Projects Left Unmarked</th>
       </tr>
-    <% end %>
-    <th>FINAL SCORE </th>
-    <th align="center"><%= @final_score %></th>
-  </table>
-  <p>achievements:    <%= @achievements %></p><br></br>
-  <p>titles:    <%= @titles %></p><br></br>
-  <p>partnerships:    <%= @partnerships %></p><br></br>
+      <% for i in 0..@unmarked_arr.size-1 %>
+          <tr>
+            <td><%= @unmarked_arr[i] %></td>
+          </tr>
+      <% end %>
+    </table>
+    <br></br>
+    <p><%= @num_validated %> projects validated (excluding exams)</p>
+    <p><%= @num_exams_validated %> exams validated </p>
+    <p><%= @num_missed %> projects missed </p>
+    <p><%= @num_exam_missed %> exams missed </p>
+    <table>
+      <caption> Score </caption>
+      <tr>
+        <th>Criteria</th>
+        <th>Value</th>
+      </tr>
+      <% for i in 0..@score_arr.size-1 %>
+          <tr>
+            <td><%= @score_arr[i][0] %></td>
+            <td align="center"><%= @score_arr[i][1] %></td>
+          </tr>
+      <% end %>
+      <th>FINAL SCORE </th>
+      <th align="center"><%= @final_score %></th>
+    </table>
+    <p>achievements:    <%= @achievements %></p><br></br>
+    <p>titles:    <%= @titles %></p><br></br>
+    <p>partnerships:    <%= @partnerships %></p><br></br>
 <% else %>
-  <h1>Page does not exist!</h1>
-  <p>You probably mispelled the name</p>
-  <p>Have you tried refreshing the users?</p>
-<%= link_to 'Home', root_path %><br></br>
+    <h1>Page does not exist!</h1>
+    <p>You probably mispelled the name</p>
+    <p>Have you tried refreshing the users?</p>
+    <%= link_to 'Home', root_path %><br></br>
 <% end %>

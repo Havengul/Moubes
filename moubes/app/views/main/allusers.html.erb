@@ -1,91 +1,415 @@
 <head>
-<style>
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  white-space:nowrap;
-  padding: 4px 7px 2px;
-}
-.greentext {
-        color: #31902B;
-}
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      white-space:nowrap;
+      padding: 4px 7px 2px;
+    }
+    .greentext {
+      color: #31902B;
+    }
 
-.orangetext {
-        color: #EB0000;
-}
-</style>
+    .redtext {
+      color: #EB0000;
+    }
+  </style>
 </head>
 <h1> All Users </h1>
 <%= link_to 'Home', root_path %><br></br>
 <table>
   <tr>
     <% for i in 0..@mass_info[0].size-1 %>
-      <th bgcolor = "E5E5E5" ><%= @mass_info[0][i] %>  </th>
+        <th bgcolor = "E5E5E5" ><%= @mass_info[0][i] %>  </th>
     <% end %>
   </tr>
   <% for i in 1..@mass_info.size-1 %>
-    <tr>
-      <% if i % 2 == 0 %>
-        <td bgcolor= "E5E5E5"><b><a href=<%= "/main/userpage?usernamesearch=" + @mass_info[i][0] + "&commit=Show" %> ><%= @mass_info[i][0] %></a></b></td>
-      <% else %>
-        <td><b><a href=<%= "/main/userpage?usernamesearch=" + @mass_info[i][0] + "&commit=Show" %> ><%= @mass_info[i][0] %></a></b></td>
-      <% end %>
-      <% for j in 1..@mass_info[i].size-1 %>
+      <tr>
         <% if i % 2 == 0 %>
-          <% if j >= 21 && j <= 24 %>
-	    <% if @mass_info[i][j].to_i >= 25 %>
-              <td class = "greentext", bgcolor= "C6C6C6" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j].to_i > 0 && @mass_info[i][j].to_i < 25 %>
-              <td class = "orangetext", bgcolor= "C6C6C6" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td bgcolor= "C6C6C6" align="center" ><%= @mass_info[i][j] %></td>
-            <% end %>
-          <% elsif j == @mass_info[i].size-1 %>
-            <% if @mass_info[i][j] >= 10 %>
-              <td class = "greentext", bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j] <= 0 %>
-              <td bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td class = "orangetext", bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% end %>
-          <% else %>
-            <% if @mass_info[i][j].to_i >= 25 %>
-              <td class = "greentext", bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j].to_i > 0 && @mass_info[i][j].to_i < 25 %>
-              <td class = "orangetext", bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td bgcolor= "E5E5E5" align="center" ><%= @mass_info[i][j] %></td>
-            <% end %>
-          <% end %>
+            <td bgcolor= "E5E5E5"><b><a href=<%= "/main/userpage?usernamesearch=" + @mass_info[i][0] + "&commit=Show" %> ><%= @mass_info[i][0] %></a></b></td>
         <% else %>
-          <% if j >= 21 && j <= 24 %>
-             <% if @mass_info[i][j].to_i >= 25 %>
-              <td class = "greentext" bgcolor= "E5E5E5" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j].to_i > 0 && @mass_info[i][j].to_i < 25 %>
-              <td class = "orangetext" bgcolor= "E5E5E5" align="center"><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td bgcolor= "E5E5E5" align="center"><%= @mass_info[i][j] %></td>
-            <% end %>
-          <% elsif j == @mass_info[i].size-1 %>
-            <% if @mass_info[i][j] >= 10 %>
-              <td class = "greentext", align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j] <= 0 %>
-              <td align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td class = "orangetext", align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% end %>
-          <% else %>
-            <% if @mass_info[i][j].to_i >= 25 %>
-              <td class = "greentext" align="center" ><b><%= @mass_info[i][j] %></b></td>
-            <% elsif @mass_info[i][j].to_i > 0 && @mass_info[i][j].to_i < 25 %>
-              <td class = "orangetext" align="center"><b><%= @mass_info[i][j] %></b></td>
-            <% else %>
-              <td align="center"><%= @mass_info[i][j] %></td>
-            <% end %>
-          <% end %>
+            <td><b><a href=<%= "/main/userpage?usernamesearch=" + @mass_info[i][0] + "&commit=Show" %> ><%= @mass_info[i][0] %></a></b></td>
         <% end %>
-      <% end %>
-    </tr>
+        <% for j in 1..@mass_info[i].size-1 %>
+            <% if i % 2 == 0 %>
+                <% if j == 1 %>
+                    <% if @mass_info[i][j].to_i >= 5 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif  @mass_info[i][j].to_i > 1 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 2 %>
+                    <% if @mass_info[i][j] >= 1 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif  @mass_info[i][j] > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 3 &&  j <= 22 %>
+                    <% if @mass_info[i][j].to_i >= 25 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 23 && j <= 26 %>
+                    <% if @mass_info[i][j].to_i >= 25 %>
+                        <td class = "greentext" bgcolor= "C6C6C6" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "C6C6C6" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "C6C6C6" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 28 %>
+                    <% if @mass_info[i][j] >= 10 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j] >= 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 29 && j <= 34 %>
+                    <% if @mass_info[i][j] == 1 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% end %>
+                <% elsif j == 35 %>
+                    <% if @mass_info[i][j].to_i > 23 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 36 %>
+                    <% if @mass_info[i][j].to_i > 5 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 37 %>
+                    <% if @mass_info[i][j].to_i > 45 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 38 %>
+                    <% if @mass_info[i][j].to_i > 4 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 39 %>
+                    <% if @mass_info[i][j].to_i > 1 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i == 1 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 40 %>
+                    <% if @mass_info[i][j].to_i < 5 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i < 10 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 41 %>
+                    <% if @mass_info[i][j].to_i == 0 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i == 1 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% else %>
+                    <td bgcolor= "E5E5E5" align="center">
+                      <%= @mass_info[i][j] %>
+                    </td>
+                <% end %>
+
+
+
+
+
+
+
+
+
+            <% else %>
+                <% if j == 1 %>
+                    <% if @mass_info[i][j].to_i >= 5 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif  @mass_info[i][j].to_i > 1 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 2 %>
+                    <% if @mass_info[i][j] >= 1 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif  @mass_info[i][j] > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 3 &&  j <= 22 %>
+                    <% if @mass_info[i][j].to_i >= 25 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 23 && j <= 26 %>
+                    <% if @mass_info[i][j].to_i >= 25 %>
+                        <td class = "greentext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" bgcolor= "E5E5E5" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td bgcolor= "E5E5E5" align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 28 %>
+                    <% if @mass_info[i][j] >= 10 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j] >= 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j >= 29 && j <= 34 %>
+                    <% if @mass_info[i][j] == 1 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% end %>
+                <% elsif j == 35 %>
+                    <% if @mass_info[i][j].to_i > 23 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 36 %>
+                    <% if @mass_info[i][j].to_i > 5 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 37 %>
+                    <% if @mass_info[i][j].to_i > 45 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 38 %>
+                    <% if @mass_info[i][j].to_i > 4 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i > 0 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 39 %>
+                    <% if @mass_info[i][j].to_i > 1 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i == 1 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 40 %>
+                    <% if @mass_info[i][j].to_i < 5 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i < 10 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% elsif j == 41 %>
+                    <% if @mass_info[i][j].to_i == 0 %>
+                        <td class = "greentext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% elsif @mass_info[i][j].to_i == 1 %>
+                        <td class = "redtext" align="center">
+                          <b><%= @mass_info[i][j] %></b>
+                        </td>
+                    <% else %>
+                        <td align="center">
+                          <%= @mass_info[i][j] %>
+                        </td>
+                    <% end %>
+                <% else %>
+                    <td align="center">
+                      <%= @mass_info[i][j] %>
+                    </td>
+                <% end %>
+            <% end %>
+        <% end %>
+      </tr>
   <% end %>
 </table>
-<p> <%= @mass_score %></p>

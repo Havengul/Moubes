@@ -137,74 +137,119 @@ class MainController < ApplicationController
     return mass_info
   end
 
-  def get_average_marks(data_array)
+  def get_average_marks(data_hash)
+		temp_info = Array.new()
+	  for k in 0..PROJECTS.size-1
+			if data_hash['projects_users']
+			  if data_hash['projects_users'].any? {|h| h['project']['slug'] == PROJECTS[k]}
+				  for j in 0..data_hash['projects_users'].size-1
+					  if data_hash['projects_users'][j]['project']['slug'] == PROJECTS[k]
+						  if data_hash['projects_users'][j]['final_mark']
+							  temp_info << data_hash['projects_users'][j]['final_mark'].to_s
+						  else
+							  temp_info << '**'
+						  end
+					  end
+				  end
+			  else
+				  temp_info << '--'
+			  end
+			end
+	  end
+
     avg = 0
-    for i in 2..data_array.size-1
-      data_array[i] = data_array[i].to_i unless data_array[i].match(/[^[:digit:]]+/)
+    for i in 2..temp_info.size-1
+      temp_info[i] = temp_info[i].to_i unless temp_info[i].match(/[^[:digit:]]+/)
     end
     for i in 2..15
-      if Integer === data_array[i]
-        avg += data_array[i].to_i
-      elsif data_array[i] == "-42"
+      if Integer === temp_info[i]
+        avg += temp_info[i].to_i
+      elsif temp_info[i] == '-42'
         avg = avg -42
-      elsif data_array[i] == "--"
+      elsif temp_info[i] == '--'
         avg = avg -1
-      elsif data_array[i] == "**"
+      elsif temp_info[i] == '**'
         avg = avg -2
       end
     end
     for i in 16..21
-      if Integer === data_array[i]
-        avg += data_array[i].to_i * 2
-      elsif data_array[i] == "-42"
+      if Integer === temp_info[i]
+        avg += temp_info[i].to_i * 2
+      elsif temp_info[i] == '-42'
         avg = avg -42 * 2
-      elsif data_array[i] == "--"
+      elsif temp_info[i] == '--'
         avg = avg -2
-      elsif data_array[i] == "**"
+      elsif temp_info[i] == '**'
         avg = avg -4
       end
     end
     for i in 22..25
-      if Integer === data_array[i]
-        avg += data_array[i].to_i * 3
-      elsif data_array[i] == "-42"
+      if Integer === temp_info[i]
+        avg += temp_info[i].to_i * 3
+      elsif temp_info[i] == '-42'
         avg = avg -42 * 3
-      elsif data_array[i] == "--" || data_array[i] == "**"
+      elsif temp_info[i] == '--' || temp_info[i] == '**'
         avg = avg -3
       end
     end
     bonus = 0
-    if Integer === data_array[25]
-      avg += data_array[25].to_i * 2
+    if Integer === temp_info[25]
+      avg += temp_info[25].to_i * 2
       bonus = 2
-    elsif data_array[25] == "-42"
+    elsif temp_info[25] == '-42'
       avg = avg -42
     end
     return (avg.to_f / (38 + bonus)).round(1)
   end
 
+  def get_user_attendance(username)
+	  file = File.read('app/fixtures/info/attend.txt').split.sort!
+	  for i in 0..file.size-1
+		  file[i] = file[i].split(';')
+	  end
+	  @file = file
+	  for i in 0..file.size-1
+		  if file[i][0] == username
+			  return file[i][1]
+		  end
+	  end
+	  return 0
+  end
+
+  def get_user_p2p(username)
+	  file = File.read('app/fixtures/info/p2p.txt').split.sort!
+	  for i in 0..file.size-1
+		  file[i] = file[i].split(';')
+	  end
+	  @file = file
+	  for i in 0..file.size-1
+		  if file[i][0] == username
+			  return file[i][1]
+		  end
+	  end
+	  return 0
+  end
+
+  def get_user_megatron(username)
+	  file = File.read('app/fixtures/info/megatron.txt').split.sort!
+	  for i in 0..file.size-1
+		  file[i] = file[i].split(';')
+	  end
+	  @file = file
+	  for i in 0..file.size-1
+		  if file[i][0] == username
+			  return file[i][1]
+		  end
+	  end
+	  return 0
+  end
+
   def get_scores(data_hash)
     score_arr = Array.new()
-    if has_cheated(data_hash) == "no"
-      score_arr.push(["cheating", 1])
-    else
-      score_arr.push(["cheating", 0])
-    end
-    if get_num_validated(data_hash) >= 5
-      score_arr.push(["validation", 1])
-    else
-      score_arr.push(["validation", 0])
-    end
-    if check_final_exam(data_hash) == 1
-      score_arr.push(["final exam", 1])
-    else
-      score_arr.push(["final exam", 0])
-    end
-    if check_all_exam(data_hash) == 1
-      score_arr.push(["other exams", 1])
-    else
-      score_arr.push(["other exams", 0])
-    end
+    (has_cheated(data_hash) == 'no') ? score_arr.push(['cheating', 1]) : score_arr.push(['cheating', 0])
+    (get_num_validated(data_hash) >= 5) ? score_arr.push(['validation', 1]) : score_arr.push(['validation', 0])
+    (check_final_exam(data_hash) == 1) ? score_arr.push(['final exam', 1]) : score_arr.push(['final exam', 0])
+    (check_all_exam(data_hash) == 1) ? score_arr.push(['other exams', 1]) : score_arr.push(['other exams', 0])
     temp_info = Array.new()
     temp_info[0] = data_hash['login']
     for k in 0..PROJECTS.size-1
@@ -224,18 +269,38 @@ class MainController < ApplicationController
         end
       end
     end
-    if get_average_marks(temp_info) >= 10
-      score_arr.push(["average above 10", 1])
-    else
-      score_arr.push(["average above 10", 0])
-    end
+    (get_average_marks(data_hash) >= 10) ?
+		    score_arr.push(['average above 10', 1]) :
+		    score_arr.push(['average above 10', 0])
+    (data_hash['cursus_users'][0]['level'] >= 1) ?
+		    score_arr.push(['level above/equal 1', 1]) :
+		    score_arr.push(['level above/equal 1', 0])
     final_score = 0
     for i in 0..score_arr.size-1
       final_score += score_arr[i][1]
     end
-    @final_score = final_score
+    if get_user_attendance(data_hash['login']).to_i > 23
+	    score_arr.push(['Attendance above 23', 1])
+			final_score += 1
+    else
+	    score_arr.push(['Attendance above 23', 0])
+    end
+    if get_user_megatron(data_hash['login']).to_i > 5
+	    score_arr.push(['Megatron above 5', 1])
+	    final_score += 1
+    else
+	    score_arr.push(['Megatron above 5', 0])
+    end
+    if get_user_p2p(data_hash['login']).to_i > 45
+	    score_arr.push(['P2P above 45', 1])
+	    final_score += 1
+    else
+	    score_arr.push(['P2P above 45', 0])
+    end
+    score_arr.insert(0, ['total', final_score])
     return score_arr
   end
+
 
   def get_user_marks(username)
     if USERS.include? username
@@ -244,12 +309,9 @@ class MainController < ApplicationController
       data_hash = JSON.parse(file)
       temp_info = Array.new()
       temp_info[0] = data_hash['login']
-      hold = get_scores(data_hash)
-      score = 0
-      for i in 0..hold.size-1
-        score += hold[i][1]
-      end
-      temp_info << score.to_s
+      score = get_scores(data_hash)
+      temp_info << score[0][1]
+      temp_info << data_hash['cursus_users'][0]['level'].round(2)
       for k in 0..PROJECTS.size-1
         if data_hash['projects_users'].any? {|h| h['project']['slug'] == PROJECTS[k]}
           for j in 0..data_hash['projects_users'].size-1
@@ -265,6 +327,17 @@ class MainController < ApplicationController
           temp_info << "--"
         end
       end
+      temp_info << get_average_marks(data_hash).round(1)
+			for i in 1..score.size-4
+				temp_info << score[i][1]
+			end
+			temp_info << get_user_attendance(data_hash['login'])
+      temp_info << get_user_megatron(data_hash['login'])
+      temp_info << get_user_p2p(data_hash['login'])
+			temp_info << get_num_validated(data_hash)
+			temp_info << get_num_exams_validated(data_hash)
+			temp_info << (unmarked(data_hash).size + unregistered(data_hash).size - get_num_exams_missed(data_hash))
+			temp_info << get_num_exams_missed(data_hash)
     end
     return temp_info
   end
@@ -277,21 +350,20 @@ class MainController < ApplicationController
     for i in 0..userlist.size-1
       temp_info = Array.new()
       temp_info = get_user_marks(userlist[i])
-      temp_info << get_average_marks(temp_info)
       mass_info << temp_info
     end
     return mass_info
   end
 
   def has_cheated(data_hash)
-    retval = "no"
+    retval = 'no'
     for j in 0..PROJECTS.size-1
       if data_hash['projects_users']
         for i in 0..data_hash['projects_users'].size-1
           if data_hash['projects_users'][i]['project']['slug'] == PROJECTS[j]
             if data_hash['projects_users'][i]['final_mark']
               if data_hash['projects_users'][i]['final_mark'].to_i == -42
-                retval = "yes"
+                retval = 'yes'
               end
             end
           end
@@ -339,10 +411,11 @@ class MainController < ApplicationController
 
   def get_num_exams_missed(data_hash)
     count = 0
+    #exams = ['bootcamp-joburg-exam-00', 'bootcamp-joburg-exam-01', 'bootcamp-joburg-exam-02']
     for j in 20..23
-      if not data_hash['projects_users'].any? {|h| h['project']['slug'] == PROJECTS[j]}
-        count += 1
-      end
+	    unless data_hash['projects_users'].any? { |h| h['project']['slug'] == PROJECTS[j] }
+		    count += 1
+	    end
       for i in 0..data_hash['projects_users'].size-1
         if data_hash['projects_users'][i]['project']['slug'] == PROJECTS[j]
           if data_hash['projects_users'][i]['final_mark'] == NIL
@@ -355,9 +428,9 @@ class MainController < ApplicationController
   end
 
   def check_final_exam(data_hash)
-    if data_hash['projecs_users']
+    if data_hash['projects_users']
       for i in 0..data_hash['projects_users'].size-1
-        if data_hash['projects_users'][i]['project']['slug'] == PROJECTS[23]
+        if data_hash['projects_users'][i]['project']['slug'] == 'bootcamp-joburg-final-exam'
           if data_hash['projects_users'][i]['final_mark']
             if data_hash['projects_users'][i]['final_mark'] >= 25
               return 1
@@ -370,29 +443,19 @@ class MainController < ApplicationController
   end
 
   def check_all_exam(data_hash)
-    for j in 20..22
-      if data_hash['projecs_users']
-        for i in 0..data_hash['projects_users'].size-1
-          if data_hash['projects_users'][i]['project']['slug'] == PROJECTS[j]
-            if data_hash['projects_users'][i]['final_mark']
-              if data_hash['projects_users'][i]['final_mark'] >= 25
-                return 1
-              end
-            end
-          end
+		exams = ['bootcamp-joburg-exam-00', 'bootcamp-joburg-exam-01', 'bootcamp-joburg-exam-02']
+	  if data_hash['projects_users']
+		  for i in 0..data_hash['projects_users'].size-1
+			  if exams.include? data_hash['projects_users'][i]['project']['slug']
+				  if data_hash['projects_users'][i]['final_mark']
+					  if data_hash['projects_users'][i]['final_mark'] >= 25
+						  return 1
+					  end
+				  end
         end
       end
     end
     return 0
-  end
-
-  def get_mass_score
-    userlist = get_all_usernames
-    mass_score = Array.new()
-    for i in 0..userlist.size-1
-      mass_score.push(get_scores(userlist[i]))
-    end
-    return mass_score
   end
 
   def userpage
@@ -404,6 +467,7 @@ class MainController < ApplicationController
       @first_name = data_hash['first_name']
       @last_name = data_hash['last_name']
       @login = data_hash['login']
+      @big_user_info = get_mass_info
       @campus_name = data_hash['campus'][0]['name']
       @intra_link = data_hash['url']
       @level = data_hash['cursus_users'][0]['level']
@@ -422,18 +486,18 @@ class MainController < ApplicationController
       if data_hash['achievements'].any?
         @achievements = achiever(data_hash)
       else
-        @achievements = "none"
-        @achiv = "none"
+        @achievements = 'none'
+        @achiv = 'none'
       end
       if data_hash['titles'].any?
         @titles = titler(data_hash)
       else
-        @titles = "none"
+        @titles = 'none'
       end
       if data_hash['partnerships'].any?
         @partnerships = partnerer(data_hash)
       else
-        @partnerships = "none"
+        @partnerships = 'none'
       end
     else
       @can_show = false
@@ -442,7 +506,6 @@ class MainController < ApplicationController
 
   def allusers
     @mass_info = get_mass_info
-    @mass_score = get_mass_score
   end
 
   def refresh
