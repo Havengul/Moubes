@@ -147,12 +147,12 @@ class MainController < ApplicationController
 						  if data_hash['projects_users'][j]['final_mark']
 							  temp_info << data_hash['projects_users'][j]['final_mark'].to_s
 						  else
-							  temp_info << '**'
+							  temp_info << '-2'
 						  end
 					  end
 				  end
 			  else
-				  temp_info << '--'
+				  temp_info << '-1'
 			  end
 			end
 	  end
@@ -166,9 +166,9 @@ class MainController < ApplicationController
         avg += temp_info[i].to_i
       elsif temp_info[i] == '-42'
         avg = avg -42
-      elsif temp_info[i] == '--'
+      elsif temp_info[i] == '1'
         avg = avg -1
-      elsif temp_info[i] == '**'
+      elsif temp_info[i] == '-2'
         avg = avg -2
       end
     end
@@ -177,9 +177,9 @@ class MainController < ApplicationController
         avg += temp_info[i].to_i * 2
       elsif temp_info[i] == '-42'
         avg = avg -42 * 2
-      elsif temp_info[i] == '--'
+      elsif temp_info[i] == '-1'
         avg = avg -2
-      elsif temp_info[i] == '**'
+      elsif temp_info[i] == '-2'
         avg = avg -4
       end
     end
@@ -188,7 +188,7 @@ class MainController < ApplicationController
         avg += temp_info[i].to_i * 3
       elsif temp_info[i] == '-42'
         avg = avg -42 * 3
-      elsif temp_info[i] == '--' || temp_info[i] == '**'
+      elsif temp_info[i] == '-1' || temp_info[i] == '-2'
         avg = avg -3
       end
     end
@@ -260,12 +260,12 @@ class MainController < ApplicationController
               if data_hash['projects_users'][j]['final_mark']
                 temp_info << data_hash['projects_users'][j]['final_mark'].to_s
               else
-                temp_info << "**"
+                temp_info << '-2'
               end
             end
           end
         else
-          temp_info << "--"
+          temp_info << '-1'
         end
       end
     end
@@ -319,12 +319,12 @@ class MainController < ApplicationController
               if data_hash['projects_users'][j]['final_mark']
                 temp_info << data_hash['projects_users'][j]['final_mark'].to_s
               else
-                temp_info << "**"
+                temp_info << '-2'
               end
             end
           end
         else
-          temp_info << "--"
+          temp_info << '-1'
         end
       end
       temp_info << get_average_marks(data_hash).round(1)
@@ -352,7 +352,11 @@ class MainController < ApplicationController
       temp_info = get_user_marks(userlist[i])
       mass_info << temp_info
     end
-    mass_info.sort_by!{|k| k[sort_num]}.reverse!
+    if (sort_num == 0)
+	    mass_info.sort_by!{|k| k[sort_num]}
+    else
+			mass_info.sort_by!{|k| k[sort_num].to_f}.reverse!
+    end
     mass_info.insert(0, my_file.read.split)
     return mass_info
   end
