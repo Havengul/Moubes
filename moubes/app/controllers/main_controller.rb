@@ -12,6 +12,59 @@ class MainController < ApplicationController
     response = token.get("/v2/users/" + username)
   end
 
+  def get_all_usernames
+    my_file = File.open("app/fixtures/userlist/userlist.txt")
+    ret_arr = my_file.read.split.sort!
+    my_file.close
+    return ret_arr
+  end
+
+  def save_user_pic(username)
+    filename = 'app/assets/images/userpics/' + username + '.png'
+    open(filename, 'wb') do |file|
+      begin
+        file << open('http://cdn.intra.42.fr/users/small_' + username + '.jpg').read
+      rescue OpenURI::HTTPError => ex
+        File.delete(file)
+      end
+    end
+  end
+
+  def save_all_pics
+    user_list = get_all_usernames
+    for i in 0..user_list.size-1
+      save_user_pic(user_list[i])
+    end
+  end
+
+  def get_project_display()
+    my_file = File.open("app/fixtures/projectlistdisplay.txt")
+    my_file.read.split
+  end
+
+  def change_status(username, status)
+	  file = File.read('app/fixtures/info/acceptance.txt').split.sort!
+	  edited = false
+	  outarray = Array.new
+	  for i in 0..file.size-1
+		  file[i] = file[i].split(';')
+			if file[i][0] == username
+				edited = true
+				outarray[i] = username + ';' + status
+			else
+				outarray[i] = file[i][0] + ';' + file[i][1]
+			end
+	  end
+	  open('app/fixtures/info/acceptance.txt', 'w') do |f|
+		  for i in 0..file.size-1
+				f.puts(outarray[i])
+		  end
+		  if edited == false
+				f.puts(username + ';' + status)
+		  end
+	  end
+  end
+
   def validator(data_hash)
     ret_arr = Array.new()
     for j in 0..PROJECTS.size-1
@@ -102,13 +155,6 @@ class MainController < ApplicationController
       ret_arr[i] << ")"
     end
     return ret_arr.to_sentence
-  end
-
-  def get_all_usernames
-    my_file = File.open("app/fixtures/userlist/userlist.txt")
-    ret_arr = my_file.read.split.sort!
-    my_file.close
-    return ret_arr
   end
 
   def users_to_JSON
@@ -338,6 +384,13 @@ class MainController < ApplicationController
 			temp_info << get_num_exams_validated(data_hash)
 			temp_info << (unmarked(data_hash).size + unregistered(data_hash).size - get_num_exams_missed(data_hash))
 			temp_info << get_num_exams_missed(data_hash)
+      status_file = File.read('app/fixtures/info/acceptance.txt').split.sort!
+      for i in 0..status_file.size-1
+				cur_status = status_file[i].split(';')
+				if cur_status[0] == username
+					temp_info << cur_status[1]
+				end
+      end
     end
     return temp_info
   end
@@ -345,8 +398,6 @@ class MainController < ApplicationController
   def get_mass_info(sort_num)
     userlist = get_all_usernames
     mass_info = Array.new()
-    my_file = File.open("app/fixtures/projectlistdisplay.txt")
-    #mass_info.push(my_file.read.split)
     for i in 0..userlist.size-1
       temp_info = Array.new()
       temp_info = get_user_marks(userlist[i])
@@ -357,7 +408,7 @@ class MainController < ApplicationController
     else
 			mass_info.sort_by!{|k| k[sort_num].to_f}.reverse!
     end
-    mass_info.insert(0, my_file.read.split)
+    mass_info.insert(0, get_project_display)
     return mass_info
   end
 
@@ -464,16 +515,24 @@ class MainController < ApplicationController
     return 0
   end
 
+  def submit
+
+  end
+
   def userpage
     @userstest = USERS
     if USERS.include? params[:usernamesearch]
       @can_show = true
       file = File.read("app/fixtures/userlist/" + params[:usernamesearch] + ".json")
       data_hash = JSON.parse(file)
+      if params[:status]
+				change_status(data_hash['login'], params[:status])
+      end
       @first_name = data_hash['first_name']
       @last_name = data_hash['last_name']
       @login = data_hash['login']
-      @big_user_info = get_mass_info(0)
+      @project_display = get_project_display
+      @user_info = get_user_marks(data_hash['login'])
       @campus_name = data_hash['campus'][0]['name']
       @intra_link = data_hash['url']
       @level = data_hash['cursus_users'][0]['level']
@@ -508,6 +567,16 @@ class MainController < ApplicationController
     else
       @can_show = false
     end
+    pod_file = File.read('app/fixtures/info/pods.txt').split.sort!
+    @pod_info == pod_file
+    for i in 0..pod_file.size-1
+	    cur_pod = pod_file[i].split(';')
+	    if cur_pod[0] == data_hash['login']
+				@pod_file = 'yes'
+		    @pod_leader = cur_pod[2]
+		    @pod_points = cur_pod[1]
+	    end
+    end
   end
 
   def allusers
@@ -515,6 +584,7 @@ class MainController < ApplicationController
   end
 
   def refresh
+    save_all_pics
     @refreshedusers = users_to_JSON
   end
 

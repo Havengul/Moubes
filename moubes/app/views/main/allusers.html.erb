@@ -19,13 +19,16 @@
 <%= link_to 'Home', root_path %><br></br>
 <table>
   <tr>
-    <% skipvals = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 29, 30, 31, 32, 33, 34] %>
+    <% skipvals = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 29, 30, 31, 32, 33, 34, 38, 39, 40, 41, 42, 43, 44] %>
     <% for i in 0..@mass_info[0].size-1 %>
         <% next if skipvals.include?(i) %>
         <th bgcolor = "E5E5E5" >
           <a href=<%= '/main/allusers?sortby=' + i.to_s + '&commit=Show' %> ><%= @mass_info[0][i] %></a>
         </th>
     <% end %>
+    <th bgcolor = "E5E5E5">
+      STATUS
+    </th>
   </tr>
   <% for i in 1..@mass_info.size-1 %>
       <tr>
@@ -229,6 +232,7 @@
 
 
 
+
             <% else %>
                 <% if j == 1 %>
                     <% if @mass_info[i][j].to_i >= 5 %>
@@ -413,6 +417,51 @@
                       <%= @mass_info[i][j] %>
                     </td>
                 <% end %>
+            <% end %>
+        <% end %>
+        <% if i % 2 == 0 %>
+            <% if @mass_info[i][42] == 'yes' %>
+                <td class="greentext" bgcolor= "E5E5E5" align="center">
+                  <b>Yes</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'no' %>
+                <td class="redtext" bgcolor= "E5E5E5" align="center">
+                  <b>No</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'boot' %>
+                <td align="center" bgcolor= "E5E5E5">
+                  <b>Bootcamp</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'maybe' %>
+                <td align="center" bgcolor= "E5E5E5">
+                  <b>Maybe?</b>
+                </td>
+            <% else %>
+                <td align="center" bgcolor= "E5E5E5">
+                  <b>N/A</b>
+                </td>
+            <% end %>
+        <% else %>
+            <% if @mass_info[i][42] == 'yes' %>
+                <td class="greentext" align="center">
+                  <b>Yes</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'no' %>
+                <td class="redtext" align="center">
+                  <b>No</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'boot' %>
+                <td align="center">
+                  <b>Bootcamp</b>
+                </td>
+            <% elsif @mass_info[i][42] == 'maybe' %>
+                <td align="center">
+                  <b>Maybe?</b>
+                </td>
+            <% else %>
+                <td align="center">
+                  <b>N/A</b>
+                </td>
             <% end %>
         <% end %>
       </tr>
