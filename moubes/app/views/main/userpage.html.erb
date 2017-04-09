@@ -18,8 +18,14 @@
 <% if @can_show == true %>
     <h1><%= @first_name %> <%= @last_name %>'s page</h1>
     <%= link_to 'Home', root_path %><br></br>
+    <%= link_to 'Users', '/main/allusers?sortby=1&commit=Show' %><br></br>
+    <%= form_tag("/main/userpage", method: "get") do %>
+        <%= label_tag("Search for:") %>
+        <%= text_field_tag "usernamesearch" %>
+        <%= submit_tag("Show") %>
+    <% end %><br></br>
     <% if @user_info[35].to_i <= 10 %>
-        <%=image_tag("defaults/skullnbones.png")%><br>
+        <%=image_tag('defaults/skullnbones.png')%><br>
         <font face="copperplate"co size="16">DEAD!</font>
     <% elsif File.exist?('app/assets/images/userpics/' + @user_info[0] + '.png')%>
         <%=image_tag('userpics/' + @user_info[0] + '.png')%><br>
@@ -27,16 +33,16 @@
         <%=image_tag('defaults/stormtrooper.png')%><br>
     <% end %>
     <% if @user_info[42] != 'yes' %>
-        <%= link_to '<button type="button">Accept</button>'.html_safe, "http://localhost:3000/main/userpage?utf8=%E2%9C%93&usernamesearch=" + @user_info[0] + "&status=yes" + "&commit=Show" %>
+        <%= link_to '<button type="button">Accept</button>'.html_safe, '/main/userpage?utf8=%E2%9C%93&usernamesearch=' + @user_info[0] + '&status=yes' + '&commit=Show' %>
     <% end %>
     <% if @user_info[42] != 'no' %>
-        <%= link_to '<button type="button">Reject</button>'.html_safe, "http://localhost:3000/main/userpage?utf8=%E2%9C%93&usernamesearch=" + @user_info[0] + "&status=no" + "&commit=Show" %>
+        <%= link_to '<button type="button">Reject</button>'.html_safe, '/main/userpage?utf8=%E2%9C%93&usernamesearch=' + @user_info[0] + '&status=no' + '&commit=Show' %>
     <% end %>
     <% if @user_info[42] != 'boot' %>
-        <%= link_to '<button type="button">Bootcamp</button>'.html_safe, "http://localhost:3000/main/userpage?utf8=%E2%9C%93&usernamesearch=" + @user_info[0] + "&status=boot" + "&commit=Show" %>
+        <%= link_to '<button type="button">Bootcamp</button>'.html_safe, '/main/userpage?utf8=%E2%9C%93&usernamesearch=' + @user_info[0] + '&status=boot' + '&commit=Show' %>
     <% end %>
     <% if @user_info[42] != 'maybe' %>
-        <%= link_to '<button type="button">Maybe</button>'.html_safe, "http://localhost:3000/main/userpage?utf8=%E2%9C%93&usernamesearch=" + @user_info[0] + "&status=maybe" + "&commit=Show" %>
+        <%= link_to '<button type="button">Maybe</button>'.html_safe, '/main/userpage?utf8=%E2%9C%93&usernamesearch=' + @user_info[0] + '&status=maybe' + '&commit=Show' %>
     <% end %>
     <table>
       <caption>Info</caption>
@@ -120,10 +126,10 @@
             </td>
         <% end %>
         <td align="center">
-          <b><%= @pod_leader %></b>
+          <b><%= @user_info.second_to_last %></b>
         </td>
         <td align="center">
-          <b><%= @pod_points %></b>
+          <b><%= @user_info.last %></b>
         </td>
       </tr>
     </table>
@@ -258,7 +264,7 @@
       </tr>
     </table>
     <br></br>
-    <p><%= @pod_file %></p>
+    <p><%= @user_info %></p>
 <% else %>
     <h1>Page does not exist!</h1>
     <p>You probably mispelled the name</p>

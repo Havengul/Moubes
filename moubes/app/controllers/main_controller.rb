@@ -392,6 +392,20 @@ class MainController < ApplicationController
 				end
       end
     end
+    pod_file = File.read('app/fixtures/info/pods.txt')
+    edited = false
+    pod_file = pod_file.split.map do |tri|
+	    name, points, pod = tri.split(';')
+	    if name == data_hash['login']
+				temp_info << pod
+				temp_info << points
+				edited = true
+	    end
+    end
+    if edited == false
+			temp_info << '??'
+			temp_info << '??'
+    end
     return temp_info
   end
 
@@ -566,16 +580,6 @@ class MainController < ApplicationController
       end
     else
       @can_show = false
-    end
-    pod_file = File.read('app/fixtures/info/pods.txt').split.sort!
-    @pod_info == pod_file
-    for i in 0..pod_file.size-1
-	    cur_pod = pod_file[i].split(';')
-	    if cur_pod[0] == data_hash['login']
-				@pod_file = 'yes'
-		    @pod_leader = cur_pod[2]
-		    @pod_points = cur_pod[1]
-	    end
     end
   end
 
