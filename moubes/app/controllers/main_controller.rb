@@ -328,8 +328,11 @@ class MainController < ApplicationController
     if get_user_attendance(data_hash['login']).to_i > 23
 	    score_arr.push(['Attendance above 23', 1])
 			final_score += 1
-    else
+    elsif get_user_attendance(data_hash['login']).to_i > 10
 	    score_arr.push(['Attendance above 23', 0])
+    else
+			final_score -= 1
+	    score_arr.push(['Attendance above 23', -1])
     end
     if get_user_megatron(data_hash['login']).to_i > 5
 	    score_arr.push(['Megatron above 5', 1])
@@ -396,14 +399,16 @@ class MainController < ApplicationController
     edited = false
     pod_file = pod_file.split.map do |tri|
 	    name, points, pod = tri.split(';')
-	    if name == data_hash['login']
-				temp_info << pod
-				temp_info << points
-				edited = true
+	    if data_hash['login']
+		    if name == data_hash['login']
+			    temp_info << pod
+			    temp_info << points
+			    edited = true
+		    end
 	    end
     end
     if edited == false
-			temp_info << '??'
+	    temp_info << '??'
 			temp_info << '??'
     end
     return temp_info
