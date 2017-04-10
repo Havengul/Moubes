@@ -388,12 +388,17 @@ class MainController < ApplicationController
 			temp_info << (unmarked(data_hash).size + unregistered(data_hash).size - get_num_exams_missed(data_hash))
 			temp_info << get_num_exams_missed(data_hash)
       status_file = File.read('app/fixtures/info/acceptance.txt').split.sort!
+      edited = false
       for i in 0..status_file.size-1
 				cur_status = status_file[i].split(';')
 				if cur_status[0] == username
 					temp_info << cur_status[1]
+					edited = true
 				end
       end
+			if edited == false
+				temp_info << 'N/A'
+			end
     end
     pod_file = File.read('app/fixtures/info/pods.txt')
     edited = false

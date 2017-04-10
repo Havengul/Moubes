@@ -427,10 +427,10 @@
         <% end %>
         <% if i % 2 == 0 %>
             <td bgcolor= "E5E5E5" align="center">
-              <b><%= @mass_info[i].second_to_last %></b>
+              <b><%= @mass_info[i][43] %></b>
             </td>
             <td bgcolor= "E5E5E5" align="center">
-              <b><%= @mass_info[i].last %></b>
+              <b><%= @mass_info[i][44] %></b>
             </td>
             <% if @mass_info[i][42] == 'yes' %>
                 <td class="greentext" bgcolor= "E5E5E5" align="center">
@@ -455,10 +455,10 @@
             <% end %>
         <% else %>
             <td align="center">
-              <b><%= @mass_info[i].second_to_last %></b>
+              <b><%= @mass_info[i][43] %></b>
             </td>
             <td align="center">
-              <b><%= @mass_info[i].last %></b>
+              <b><%= @mass_info[i][44] %></b>
             </td>
             <% if @mass_info[i][42] == 'yes' %>
                 <td class="greentext" align="center">
