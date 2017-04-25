@@ -27,13 +27,13 @@
         </th>
     <% end %>
     <th bgcolor = "E5E5E5" >
-      Pod Leader
+      <a href=<%= '/main/allusers?sortby=43&commit=Show' %> >Pod Leader</a>
     </th>
     <th bgcolor = "E5E5E5" >
-      Pod Points
+      <a href=<%= '/main/allusers?sortby=44&commit=Show' %> >Pod Points</a>
     </th>
     <th bgcolor = "E5E5E5">
-      STATUS
+      <a href=<%= '/main/allusers?sortby=42&commit=Show' %> >STATUS</a>
     </th>
   </tr>
   <% for i in 1..@mass_info.size-1 %>
@@ -485,4 +485,9 @@
       </tr>
   <% end %>
 </table>
-<p> <%= @test %> </p>
+<br></br>
+<%= link_to 'download', '/main/download_csv', :class => 'btn btn-large btn-danger', target: '_blank' %><br></br>
+
+
+<p> <%= @mass_info[2] %> </p>
+<p> <%= @mass_info[2].size-1 %> </p>

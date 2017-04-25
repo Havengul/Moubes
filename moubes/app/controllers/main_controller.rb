@@ -427,11 +427,12 @@ class MainController < ApplicationController
       temp_info = get_user_marks(userlist[i])
       mass_info << temp_info
     end
-    if (sort_num == 0)
+    if (sort_num == 0 || sort_num == 43 || sort_num == 42)
 	    mass_info.sort_by!{|k| k[sort_num]}
     else
 			mass_info.sort_by!{|k| k[sort_num].to_f}.reverse!
     end
+    @test = mass_info
     mass_info.insert(0, get_project_display)
     return mass_info
   end
@@ -539,9 +540,36 @@ class MainController < ApplicationController
     return 0
   end
 
-  def submit
-
+  def write_csv(mass_arr)
+	  skipvals = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 29, 30, 31, 32, 33, 34, 38, 39, 40, 41, 42, 43, 44, 99]
+	  open('app/fixtures/all_users.csv', 'w') do |f|
+		  hold_str = Array.new
+		  hold_str << mass_arr[0][0]
+			for i in 1..mass_arr[0].size-1
+				next if skipvals.include?(i)
+				hold_str << ';' + mass_arr[0][i]
+			end
+		  hold_str = hold_str.join
+		  f.puts(hold_str)
+		  @test = hold_str
+		  for i in 1..mass_arr.size-1
+				hold_str = Array.new
+				hold_str << mass_arr[i][0]
+				for j in 1..mass_arr[i].size-1
+					next if skipvals.include?(j)
+					hold_str << ';' + mass_arr[i][j].to_s
+				end
+				hold_str = hold_str.join
+				f.puts(hold_str)
+		  end
+	  end
   end
+
+  def download_csv
+		write_csv(get_mass_info(0))
+	  send_file('/Users/Havengul/Work/Internship/Moubes/moubes/app/fixtures/all_users.csv')
+  end
+
 
   def userpage
     @userstest = USERS

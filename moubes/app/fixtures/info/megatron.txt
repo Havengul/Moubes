@@ -1,4 +1,4 @@
-khanye;26
+akhanye;26
 ptsai;20
 ftait;16
 pde-brui;14
